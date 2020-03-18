@@ -11,8 +11,6 @@
 
 import 'dart:math';
 
-import 'package:tuple/tuple.dart';
-
 void main() {
   Volume();
 }
@@ -65,10 +63,10 @@ class Volume {
     _unitNames[_supportedUnits[8]] = Set.from(["liter", "L", "l"]);
     // Create adjacency matrix
     initVolumeMatrix();
-    print(calculateNearestWholeUnit("cups", 0.375));
+    print(calculateNearestWholeUnit("cups", 0.5));
   }
 
-  Tuple2<String, double> calculateNearestWholeUnit(String unit, double amount) {
+  Map<String, double> calculateNearestWholeUnit(String unit, double amount) {
     // Find the unit in supportedUnits
     bool found = false;
     for (String supportedUnit in _supportedUnits) {
@@ -98,32 +96,31 @@ class Volume {
       conversions[c] = conversion;
     }
     // Find nearest whole unit
-    //conversions.sort();
     List<double> remainders = [0.25, 0.33, 0.5, 0.75];
-    List<double> possibleAnswers = new List();
+    Map<String, double> possibleAnswers = new Map();
     for (int i = 0; i < conversions.length; i++) {
       double conversion = conversions[i];
-      //conversion = roundDouble(conversion, 2);
       // Prioritization
       // 0.25, 0.5, 0.75, 2 better then 0.375, 0.543
       double remainder =
           roundDouble((conversion - conversion.toInt()).abs(), 2);
       if (remainder == 0) {
-        possibleAnswers.add(conversion);
         unit = _supportedUnits[i];
         print("Unit: " + unit + " Amount: " + conversion.toString());
+        nearestWholeUnit = conversion;
+        possibleAnswers[unit] = conversion;
       } else if (remainders.contains(remainder)) {
-        if (conversion < nearestWholeUnit) {
-          print("Remainder is " + remainder.toString());
-          nearestWholeUnit = conversion;
-          unit = _supportedUnits[i];
-          print("Unit: " + unit + " Amount: " + conversion.toString());
-          possibleAnswers.add(conversion);
-        }
+        print("Remainder is " + remainder.toString());
+        nearestWholeUnit = conversion;
+        unit = _supportedUnits[i];
+        print("Unit: " + unit + " Amount: " + conversion.toString());
+        possibleAnswers[unit] = conversion;
       }
     }
-    print(possibleAnswers);
-    return Tuple2(unit, nearestWholeUnit);
+    //print(possibleAnswers);
+//    Tuple2(unit, nearestWholeUnit);
+    possibleAnswers["answer-" + unit] = nearestWholeUnit;
+    return possibleAnswers;
   }
 
   double roundDouble(double value, int places) {
