@@ -63,7 +63,25 @@ class Volume {
     _unitNames[_supportedUnits[8]] = Set.from(["liter", "L", "l"]);
     // Create adjacency matrix
     initVolumeMatrix();
+//    input.add("2.4 cups sugar");
+//    input.add("5 large eggs");
+//    input.add("2 2/3 cups milk");
+//    input.add("2 teaspoons pure vanilla extract");
+//    input.add("3 cups cubed Italian bread");
+//    input.add("1/2 cup packed light brown sugar");
+//    input.add("A pinch of salt");
+    print(calculateNearestWholeUnit("cups", 2.4));
+    print("");
+    print(calculateNearestWholeUnit("cups", 2.66));
+    print("");
+    print(calculateNearestWholeUnit("tsp", 2));
+    print("");
+    print(calculateNearestWholeUnit("T.", 2));
+    print("");
+    print(calculateNearestWholeUnit("cups", 3));
+    print("");
     print(calculateNearestWholeUnit("cups", 0.5));
+    print("");
   }
 
   Map<String, double> calculateNearestWholeUnit(String unit, double amount) {
@@ -71,7 +89,7 @@ class Volume {
     bool found = false;
     for (String supportedUnit in _supportedUnits) {
       for (String abbreviation in _unitNames[supportedUnit]) {
-        if (unit == abbreviation) {
+        if (abbreviation.contains(unit)) {
           // Found
           unit = supportedUnit;
           found = true;
@@ -96,7 +114,7 @@ class Volume {
       conversions[c] = conversion;
     }
     // Find nearest whole unit
-    List<double> remainders = [0.25, 0.33, 0.5, 0.75];
+    List<double> remainders = [0.25, 0.33, 0.5, 0.66, 0.75];
     Map<String, double> possibleAnswers = new Map();
     for (int i = 0; i < conversions.length; i++) {
       double conversion = conversions[i];
@@ -110,7 +128,6 @@ class Volume {
         nearestWholeUnit = conversion;
         possibleAnswers[unit] = conversion;
       } else if (remainders.contains(remainder)) {
-        print("Remainder is " + remainder.toString());
         nearestWholeUnit = conversion;
         unit = _supportedUnits[i];
         print("Unit: " + unit + " Amount: " + conversion.toString());
