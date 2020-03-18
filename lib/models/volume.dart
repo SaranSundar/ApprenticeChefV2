@@ -62,7 +62,7 @@ class Volume {
     ]);
     _unitNames[_supportedUnits[8]] = Set.from(["liter", "L", "l"]);
     // Create adjacency matrix
-    initVolumeMatrix();
+    _initVolumeMatrix();
 //    input.add("2.4 cups sugar");
 //    input.add("5 large eggs");
 //    input.add("2 2/3 cups milk");
@@ -70,21 +70,21 @@ class Volume {
 //    input.add("3 cups cubed Italian bread");
 //    input.add("1/2 cup packed light brown sugar");
 //    input.add("A pinch of salt");
-    print(calculateNearestWholeUnit("cups", 2.4));
+    print(_calculateNearestWholeUnit("cups", 2.4));
     print("");
-    print(calculateNearestWholeUnit("cups", 2.66));
+    print(_calculateNearestWholeUnit("cups", 2.66));
     print("");
-    print(calculateNearestWholeUnit("tsp", 2));
+    print(_calculateNearestWholeUnit("tsp", 2));
     print("");
-    print(calculateNearestWholeUnit("T.", 2));
+    print(_calculateNearestWholeUnit("T.", 2));
     print("");
-    print(calculateNearestWholeUnit("cups", 3));
+    print(_calculateNearestWholeUnit("cups", 3));
     print("");
-    print(calculateNearestWholeUnit("cups", 0.5));
+    print(_calculateNearestWholeUnit("cups", 0.5));
     print("");
   }
 
-  Map<String, double> calculateNearestWholeUnit(String unit, double amount) {
+  Map<String, double> _calculateNearestWholeUnit(String unit, double amount) {
     // Find the unit in supportedUnits
     bool found = false;
     for (String supportedUnit in _supportedUnits) {
@@ -121,7 +121,7 @@ class Volume {
       // Prioritization
       // 0.25, 0.5, 0.75, 2 better then 0.375, 0.543
       double remainder =
-          roundDouble((conversion - conversion.toInt()).abs(), 2);
+          _roundDouble((conversion - conversion.toInt()).abs(), 2);
       if (remainder == 0) {
         unit = _supportedUnits[i];
         print("Unit: " + unit + " Amount: " + conversion.toString());
@@ -140,12 +140,12 @@ class Volume {
     return possibleAnswers;
   }
 
-  double roundDouble(double value, int places) {
+  double _roundDouble(double value, int places) {
     double mod = pow(10.0, places);
     return ((value * mod).round().toDouble() / mod);
   }
 
-  void initVolumeMatrix() {
+  void _initVolumeMatrix() {
     _volumes = List.generate(
         _supportedUnits.length, (i) => List(_supportedUnits.length),
         growable: false);
